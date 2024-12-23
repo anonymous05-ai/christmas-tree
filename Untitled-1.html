@@ -13,7 +13,7 @@
     canvas {
       display: block;
     }
-   .gift {
+    .gift {
       position: absolute;
       width: 40px;
       height: 40px;
@@ -45,7 +45,8 @@
 </head>
 <body>
 <canvas id="treeCanvas"></canvas>
-  <!-- Animated gift boxes -->
+
+<!-- Animated gift boxes -->
 <div class="gift" style="left: 45%; bottom: 120px; animation-delay: 0s;"></div>
 <div class="gift" style="left: 50%; bottom: 120px; animation-delay: 0.5s;"></div>
 <div class="gift" style="left: 55%; bottom: 120px; animation-delay: 1s;"></div>
@@ -117,67 +118,6 @@
     ctx.fill();
   }
 
-  // Draw Santa and Reindeer
-  let santaX = -200; // Initial X position of Santa
-  function drawSanta(x, y) {
-    // Santa body
-    ctx.fillStyle = "red";
-    ctx.fillRect(x, y, 40, 50); // Body
-
-    // Santa head
-    ctx.beginPath();
-    ctx.arc(x + 20, y - 20, 20, 0, Math.PI * 2);
-    ctx.fillStyle = "white";
-    ctx.fill();
-
-    // Hat
-    ctx.beginPath();
-    ctx.moveTo(x + 10, y - 30);
-    ctx.lineTo(x + 30, y - 30);
-    ctx.lineTo(x + 20, y - 50);
-    ctx.closePath();
-    ctx.fillStyle = "red";
-    ctx.fill();
-  }
-
-  function drawReindeer(x, y) {
-    // Reindeer body
-    ctx.fillStyle = "brown";
-    ctx.fillRect(x, y, 60, 30);
-
-    // Legs
-    ctx.fillRect(x + 5, y + 30, 10, 20);
-    ctx.fillRect(x + 45, y + 30, 10, 20);
-
-    // Head
-    ctx.beginPath();
-    ctx.arc(x + 70, y + 15, 15, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Antlers
-    ctx.strokeStyle = "brown";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(x + 75, y);
-    ctx.lineTo(x + 90, y - 20);
-    ctx.moveTo(x + 75, y);
-    ctx.lineTo(x + 60, y - 20);
-    ctx.stroke();
-  }
-
-  function moveSantaAndReindeer() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawTree(); // Re-draw tree and decorations
-    drawSanta(santaX, canvas.height / 3);
-    drawReindeer(santaX + 100, canvas.height / 3 + 20);
-    drawReindeer(santaX + 200, canvas.height / 3 + 20);
-
-    santaX += 2; // Speed of Santa and reindeer
-    if (santaX > canvas.width + 200) santaX = -200; // Reset position
-
-    requestAnimationFrame(moveSantaAndReindeer);
-  }
-
   // Draw snowflakes
   const snowflakes = [];
   function createSnowflakes() {
@@ -245,7 +185,7 @@
   }
 
   createSnowflakes();
-  moveSantaAndReindeer();
+  setInterval(drawTree, 1000 / 60); // Draw tree at 60 FPS
 </script>
 </body>
 </html>

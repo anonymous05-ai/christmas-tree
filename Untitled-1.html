@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Christmas Tree 2024</title>
+  <style>
+    body {
+      background-color: black;
+      overflow: hidden;
+      margin: 0;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<canvas id="treeCanvas"></canvas>
+<script>
+  const canvas = document.getElementById('treeCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  // Draw tree trunk
+  function drawTrunk() {
+    ctx.fillStyle = "brown";
+    ctx.fillRect(canvas.width / 2 - 30, canvas.height - 150, 60, 100);
+  }
+
+  // Draw tree branches
+  function drawBranch(x, y, width, height) {
+    ctx.beginPath();
+    ctx.moveTo(x - width / 2, y);
+    ctx.lineTo(x + width / 2, y);
+    ctx.lineTo(x, y - height);
+    ctx.closePath();
+    ctx.fillStyle = "green";
+    ctx.fill();
+  }
+
+  // Draw decorations
+  function drawCircle(x, y, radius, color) {
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, 2 * Math.PI);
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
+
+  // Draw star
+  function drawStar(x, y, size, color) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    for (let i = 0; i < 5; i++) {
+      ctx.lineTo(
+        x + size * Math.cos((18 + i * 72) * Math.PI / 180),
+        y - size * Math.sin((18 + i * 72) * Math.PI / 180)
+      );
+      ctx.lineTo(
+        x + (size / 2) * Math.cos((54 + i * 72) * Math.PI / 180),
+        y - (size / 2) * Math.sin((54 + i * 72) * Math.PI / 180)
+      );
+    }
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // Draw gift box
+  function drawGift(x, y) {
+    ctx.fillStyle = "red";
+    ctx.fillRect(x, y, 40, 40);
+
+    ctx.fillStyle = "orange";
+    ctx.fillRect(x + 15, y, 10, 40);
+
+    ctx.beginPath();
+    ctx.moveTo(x + 20, y);
+    ctx.lineTo(x + 10, y - 10);
+    ctx.lineTo(x + 20, y - 20);
+    ctx.lineTo(x + 30, y - 10);
+    ctx.closePath();
+    ctx.fillStyle = "orange";
+    ctx.fill();
+  }
+
+  // Draw Santa and Reindeer
+  let santaX = -200; // Initial X position of Santa
+  function drawSanta(x, y) {
+    // Santa body
+    ctx.fillStyle = "red";
+    ctx.fillRect(x, y, 40, 50); // Body
+
+    // Santa head
+    ctx.beginPath();
+    ctx.arc(x + 20, y - 20, 20, 0, Math.PI * 2);
+    ctx.fillStyle = "white";
+    ctx.fill();
+
+    // Hat
+    ctx.beginPath();
+    ctx.moveTo(x + 10, y - 30);
+    ctx.lineTo(x + 30, y - 30);
+    ctx.lineTo(x + 20, y - 50);
+    ctx.closePath();
+    ctx.fillStyle = "red";
+    ctx.fill();
+  }
+
+  function drawReindeer(x, y) {
+    // Reindeer body
+    ctx.fillStyle = "brown";
+    ctx.fillRect(x, y, 60, 30);
+
+    // Legs
+    ctx.fillRect(x + 5, y + 30, 10, 20);
+    ctx.fillRect(x + 45, y + 30, 10, 20);
+
+    // Head
+    ctx.beginPath();
+    ctx.arc(x + 70, y + 15, 15, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Antlers
+    ctx.strokeStyle = "brown";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(x + 75, y);
+    ctx.lineTo(x + 90, y - 20);
+    ctx.moveTo(x + 75, y);
+    ctx.lineTo(x + 60, y - 20);
+    ctx.stroke();
+  }
+
+  function moveSantaAndReindeer() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawTree(); // Re-draw tree and decorations
+    drawSanta(santaX, canvas.height / 3);
+    drawReindeer(santaX + 100, canvas.height / 3 + 20);
+    drawReindeer(santaX + 200, canvas.height / 3 + 20);
+
+    santaX += 2; // Speed of Santa and reindeer
+    if (santaX > canvas.width + 200) santaX = -200; // Reset position
+
+    requestAnimationFrame(moveSantaAndReindeer);
+  }
+
+  // Draw snowflakes
+  const snowflakes = [];
+  function createSnowflakes() {
+    for (let i = 0; i < 50; i++) {
+      snowflakes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 3 + 1,
+        speed: Math.random() * 1 + 0.5,
+      });
+    }
+  }
+
+  function drawSnowflakes() {
+    snowflakes.forEach((snowflake) => {
+      ctx.beginPath();
+      ctx.arc(snowflake.x, snowflake.y, snowflake.size, 0, Math.PI * 2);
+      ctx.fillStyle = "white";
+      ctx.fill();
+
+      // Update snowflake position
+      snowflake.y += snowflake.speed;
+      if (snowflake.y > canvas.height) {
+        snowflake.y = -10;
+        snowflake.x = Math.random() * canvas.width;
+      }
+    });
+  }
+
+  // Draw "Merry Christmas"
+  function drawText() {
+    ctx.font = "bold 50px 'Vladimir Script', cursive";
+    ctx.fillStyle = "red";
+    ctx.textAlign = "center";
+    ctx.fillText("Merry Christmas 2024!", canvas.width / 2, 100);
+  }
+
+  function drawTree() {
+    drawText(); // Draw the text
+    drawTrunk();
+    drawBranch(canvas.width / 2, canvas.height - 150, 300, 100);
+    drawBranch(canvas.width / 2, canvas.height - 200, 200, 80);
+    drawBranch(canvas.width / 2, canvas.height - 250, 100, 60);
+
+    const ornaments = [
+      { x: canvas.width / 2 - 100, y: canvas.height - 130, color: "yellow" },
+      { x: canvas.width / 2 + 100, y: canvas.height - 130, color: "purple" },
+      { x: canvas.width / 2 - 50, y: canvas.height - 90, color: "white" },
+      { x: canvas.width / 2 + 40, y: canvas.height - 80, color: "pink" },
+      { x: canvas.width / 2 - 30, y: canvas.height - 40, color: "yellow" },
+      { x: canvas.width / 2 + 90, y: canvas.height - 20, color: "white" },
+      { x: canvas.width / 2 - 70, y: canvas.height + 10, color: "red" },
+      { x: canvas.width / 2 + 40, y: canvas.height + 60, color: "blue" },
+    ];
+
+    ornaments.forEach(o => drawCircle(o.x, o.y, 10, o.color));
+
+    drawStar(canvas.width / 2, canvas.height - 300, 30, "yellow");
+
+    // Draw gift boxes
+    drawGift(canvas.width / 2 + 150, canvas.height - 100);
+    drawGift(canvas.width / 2 - 200, canvas.height - 100);
+
+    drawSnowflakes();
+  }
+
+  createSnowflakes();
+  moveSantaAndReindeer();
+</script>
+</body>
+</html>
